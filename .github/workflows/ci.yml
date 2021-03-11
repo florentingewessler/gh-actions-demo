@@ -19,6 +19,10 @@ jobs:
           java-version: 11
       - name: Build
         run: ./mvnw verify -B
+      - name: install ssh key
+        uses: webfactory/ssh-agent@v0.4.1
+        with:
+          ssh-private-key: ${{ secrets.ORAVM }}
       - name: Publish
         uses: nogsantos/scp-deploy@master
         with:
@@ -27,5 +31,20 @@ jobs:
           remote: /opt
           port: 22
           user: ubuntu
-          key: ~/.ssh/oravm/ssh-key-2021-03-11.key.pub
-
+          key: ${{ secrets.ORAVM }}
+      #      - name: Publish
+      #        uses: nogsantos/scp-deploy@master
+      #        with:
+      #          src: ./dist/*
+      #          host: ${{ secrets.SSH_HOST }}
+      #          remote: ${{ secrets.SSH_DIR }}
+      #          port: ${{ secrets.SSH_PORT }}
+      #          user: ${{ secrets.SSH_USER }}
+      #          key: ${{ secrets.SSH_KEY }}
+      - name: start on server
+        uses: garygrossgarten/github-action-ssh@release
+        with:
+          command: java -jar /opt/gh-actions-demo-1.0.0-SNAPSHOT.jar
+          host: 130.61.255.109
+          username: ubuntu
+          privateKey: ${{ secrets.ORAVM }}
