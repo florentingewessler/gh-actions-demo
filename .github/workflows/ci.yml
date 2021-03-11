@@ -27,5 +27,5 @@ jobs:
           remote: /opt
           port: 22
           user: ubuntu
-          key: ~/.ssh/oravm/ssh-key-2021-03-11.key
+          key: ~/.ssh/oravm/ssh-key-2021-03-11.key.pub
 
