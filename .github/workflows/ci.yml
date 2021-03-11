@@ -19,17 +19,13 @@ jobs:
           java-version: 11
       - name: Build
         run: ./mvnw verify -B
-      - name: install ssh key
-        uses: webfactory/ssh-agent@v0.4.1
+      - name: Publish
+        uses: nogsantos/scp-deploy@master
         with:
-          ssh-private-key: ${{ secrets.ORAVM }}
-      - name: create .ssh/known_hosts
-        run: |
-          ssh-keyscan -H -t rsa -v 130.61.156.232 >> ~/.ssh/known_hosts
-      - name: copy file to remote server
-        env:
-          mysshkey: ${{ secrets.ORAVM }}
-        run: |
-          echo "$mysshkey" > ~/.ssh/git-key
-          chmod 600 ~/.ssh/git-key
-          scp -i ~/.ssh/git-key mysshkey /home/runner/work/gh-actions-demo/gh-actions-demo/target/gh-actions-demo-1.0.0-SNAPSHOT.jar 130.61.156.232:/opt/
+          src: /home/runner/work/gh-actions-demo/gh-actions-demo/target/gh-actions-demo-1.0.0-SNAPSHOT.jar
+          host: 130.61.156.232
+          remote: /opt
+          port: 22
+          user: ubuntu
+          key: ~/.ssh/oravm/ssh-key-2021-03-11.key
+
