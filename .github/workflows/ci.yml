@@ -26,3 +26,6 @@ jobs:
       - name: create .ssh/known_hosts
         run: |
           ssh-keyscan -H -t rsa -v 130.61.156.232 >> ~/.ssh/known_hosts
+      - name: copy file to remote server
+        run: |
+          scp -i ${{ secrets.ORAVM }} /home/runner/work/gh-actions-demo/gh-actions-demo/target/gh-actions-demo-1.0.0-SNAPSHOT.jar 130.61.156.232:/opt/
